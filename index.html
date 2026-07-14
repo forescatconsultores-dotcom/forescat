@@ -1,87 +1,659 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mis Servicios</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f4f4f4;
-      color: #333;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORESCAT · Asesoría Financiera y Contable</title>
+<meta name="description" content="FORESCAT — Asesoría financiera y contable integral para empresas y emprendedores.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A2036;
+    --ink-soft:#123049;
+    --parchment:#F1F4F2;
+    --paper:#FFFFFF;
+    --brass:#B8935A;
+    --brass-dark:#96733E;
+    --teal:#123B36;
+    --text:#1B1F23;
+    --text-soft:#4B5560;
+    --line: rgba(10,32,54,0.14);
+    --radius: 4px;
+    --maxw: 1120px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    color:var(--text);
+    background:var(--parchment);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    margin:0 0 .5em 0;
+    color:var(--ink);
+    letter-spacing:-0.01em;
+  }
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 24px; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--brass-dark);
+    font-weight:600;
+    margin-bottom:.9em;
+    display:inline-flex;
+    align-items:center;
+    gap:.6em;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px;
+    background:var(--brass-dark);
+    display:inline-block;
+  }
+
+  /* Ledger double-rule: signature element referencing the accounting convention
+     of a double underline marking a closed total. */
+  .ledger-rule{
+    height:6px;
+    background-image:
+      linear-gradient(var(--line), var(--line));
+    background-size:100% 1px;
+    background-repeat:no-repeat;
+    background-position: top, bottom;
+  }
+  .ledger-rule{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    height:4px;
+  }
+
+  a.skip-link{
+    position:absolute; left:-999px; top:auto;
+    background:var(--ink); color:#fff; padding:10px 16px; z-index:200;
+  }
+  a.skip-link:focus{ left:16px; top:16px; }
+
+  /* Header */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:var(--ink);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+    color:#fff; text-decoration:none;
+  }
+  .brand img{ height:42px; width:auto; border-radius:3px; }
+  .brand-name{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.25rem;
+    color:#fff;
+    letter-spacing:.02em;
+  }
+  .brand-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.62rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.55);
+    display:block;
+    margin-top:2px;
+  }
+  nav.links{ display:flex; gap:8px; align-items:center; }
+  nav.links a{
+    color:rgba(255,255,255,.85);
+    text-decoration:none;
+    font-weight:500;
+    font-size:.95rem;
+    padding:10px 14px;
+    border-radius:var(--radius);
+    transition:background .2s, color .2s;
+  }
+  nav.links a:hover, nav.links a:focus-visible{
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    outline: none;
+  }
+  nav.links a.cta{
+    background:var(--brass);
+    color:var(--ink);
+    font-weight:600;
+  }
+  nav.links a.cta:hover{ background:#c9a066; }
+
+  .menu-toggle{
+    display:none;
+    background:none; border:none; cursor:pointer;
+    padding:8px; color:#fff;
+  }
+  .menu-toggle svg{ width:24px; height:24px; }
+
+  /* Hero */
+  .hero{
+    background:
+      repeating-linear-gradient(to bottom, transparent 0 39px, rgba(255,255,255,.045) 39px 40px),
+      linear-gradient(160deg, var(--ink) 0%, var(--ink-soft) 65%, #163a58 100%);
+    color:#fff;
+    padding:96px 24px 88px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{ position:relative; z-index:2; }
+  .hero-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.75rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--brass);
+    margin-bottom:20px;
+    display:flex; align-items:center; gap:.7em;
+  }
+  .hero-eyebrow::before{ content:"§"; font-size:1rem; }
+  .hero h2{
+    color:#fff;
+    font-size:clamp(2.4rem, 5vw, 3.6rem);
+    line-height:1.08;
+    max-width:14ch;
+    margin-bottom:.35em;
+  }
+  .hero p.lead{
+    max-width:52ch;
+    font-size:1.15rem;
+    color:rgba(255,255,255,.82);
+    margin-bottom:2em;
+  }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:.5em;
+    padding:14px 26px;
+    border-radius:var(--radius);
+    text-decoration:none;
+    font-weight:600;
+    font-size:.98rem;
+    transition:transform .15s ease, box-shadow .15s ease, background .2s;
+    border:1px solid transparent;
+    cursor:pointer;
+  }
+  .btn-primary{ background:var(--brass); color:var(--ink); }
+  .btn-primary:hover{ background:#c9a066; transform:translateY(-2px); }
+  .btn-ghost{ border-color:rgba(255,255,255,.35); color:#fff; }
+  .btn-ghost:hover{ background:rgba(255,255,255,.1); transform:translateY(-2px); }
+
+  .hero-stats{
+    display:flex; gap:0; margin-top:64px;
+    border-top:1px solid rgba(255,255,255,.15);
+    padding-top:28px;
+    flex-wrap:wrap;
+  }
+  .stat{ flex:1; min-width:150px; padding-right:24px; }
+  .stat .num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:1.9rem;
+    font-weight:600;
+    color:var(--brass);
+    display:block;
+  }
+  .stat .label{ font-size:.85rem; color:rgba(255,255,255,.7); margin-top:4px; }
+
+  /* Sections */
+  section{ padding:88px 24px; }
+  .section-head{ max-width:640px; margin:0 auto 56px; text-align:left; }
+  .section-head.center{ text-align:center; margin-left:auto; margin-right:auto; }
+  .section-head h2{ font-size:clamp(1.9rem,3vw,2.4rem); }
+  .section-head p{ color:var(--text-soft); font-size:1.05rem; }
+
+  /* Servicios como asientos de un libro contable */
+  #servicios{ background:var(--paper); }
+  .ledger{ border-top:1px solid var(--line); }
+  .ledger-row{
+    display:grid;
+    grid-template-columns:96px 1fr 140px;
+    gap:24px;
+    align-items:start;
+    padding:28px 0;
+    border-bottom:1px solid var(--line);
+    transition:background .2s;
+  }
+  .ledger-row:hover{ background:rgba(184,147,90,.06); }
+  .ledger-code{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--brass-dark);
+    font-weight:600;
+    font-size:1.05rem;
+    padding-top:2px;
+  }
+  .ledger-body h3{ font-size:1.2rem; margin-bottom:.35em; }
+  .ledger-body p{ color:var(--text-soft); margin:0; max-width:56ch; }
+  .ledger-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--teal);
+    background:rgba(18,59,54,.08);
+    padding:6px 10px;
+    border-radius:var(--radius);
+    justify-self:start;
+    white-space:nowrap;
+  }
+  @media (max-width:640px){
+    .ledger-row{ grid-template-columns:56px 1fr; }
+    .ledger-tag{ grid-column:2; margin-top:8px; }
+  }
+
+  /* Nosotros */
+  #nosotros{
+    background:var(--ink);
+    color:#fff;
+  }
+  #nosotros .grid{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  #nosotros h2{ color:#fff; }
+  #nosotros p{ color:rgba(255,255,255,.78); font-size:1.05rem; }
+  .pillars{ display:grid; gap:20px; }
+  .pillar{
+    display:flex; gap:16px;
+    padding:20px;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:var(--radius);
+    background:rgba(255,255,255,.03);
+  }
+  .pillar .mark{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--brass);
+    font-weight:600;
+    font-size:.95rem;
+  }
+  .pillar h4{ color:#fff; font-size:1.02rem; margin-bottom:.25em; }
+  .pillar p{ margin:0; font-size:.92rem; color:rgba(255,255,255,.65); }
+  @media (max-width:860px){
+    #nosotros .grid{ grid-template-columns:1fr; }
+  }
+
+  /* Contacto */
+  #contacto{ background:var(--paper); }
+  .contact-shell{
+    display:grid;
+    grid-template-columns:1fr 1.2fr;
+    gap:48px;
+    background:var(--parchment);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:48px;
+  }
+  .contact-info h3{ font-size:1.3rem; }
+  .contact-info p{ color:var(--text-soft); }
+  .contact-line{
+    display:flex; align-items:center; gap:12px;
+    margin-top:18px;
+    font-size:.95rem;
+  }
+  .contact-line .ic{
+    width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--ink); color:var(--brass);
+    border-radius:50%;
+    flex:none;
+  }
+  form{ display:grid; gap:16px; }
+  .field{ display:grid; gap:6px; }
+  label{
+    font-size:.82rem; font-weight:600; color:var(--text);
+  }
+  input, textarea{
+    font-family:'Inter', sans-serif;
+    font-size:.98rem;
+    padding:13px 14px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:#fff;
+    color:var(--text);
+    transition:border-color .2s, box-shadow .2s;
+  }
+  input:focus, textarea:focus{
+    outline:none;
+    border-color:var(--brass);
+    box-shadow:0 0 0 3px rgba(184,147,90,.18);
+  }
+  .error-msg{
+    font-size:.8rem; color:#B3261E; min-height:1.1em;
+  }
+  .field.invalid input, .field.invalid textarea{ border-color:#B3261E; }
+  button[type="submit"]{
+    justify-self:start;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+  }
+  button[type="submit"]:hover{ background:var(--ink-soft); transform:translateY(-2px); }
+  .form-status{
+    font-size:.9rem;
+    padding:12px 14px;
+    border-radius:var(--radius);
+    display:none;
+  }
+  .form-status.show{ display:block; }
+  .form-status.ok{ background:rgba(18,59,54,.1); color:var(--teal); }
+
+  @media (max-width:860px){
+    .contact-shell{ grid-template-columns:1fr; padding:32px; }
+  }
+
+  footer{
+    background:var(--ink);
+    color:rgba(255,255,255,.6);
+    text-align:center;
+    padding:28px 24px;
+    font-size:.85rem;
+  }
+  footer a{ color:var(--brass); text-decoration:none; }
+
+  /* Reveal on scroll */
+  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* Mobile nav */
+  @media (max-width:860px){
+    .menu-toggle{ display:inline-flex; }
+    nav.links{
+      position:absolute; top:100%; left:0; right:0;
+      background:var(--ink);
+      flex-direction:column;
+      align-items:stretch;
+      padding:8px 24px 20px;
+      display:none;
+      border-bottom:1px solid rgba(255,255,255,.08);
     }
-    header {
-      background: #0077b6;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    nav {
-      background: #023e8a;
-      padding: 10px;
-      text-align: center;
-    }
-    nav a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-    }
-    section {
-      padding: 40px;
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      margin-top: 20px;
-      border-radius: 8px;
-    }
-    h2 {
-      color: #0077b6;
-    }
-    footer {
-      background: #0077b6;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      margin-top: 20px;
-    }
-  </style>
+    nav.links.open{ display:flex; }
+    nav.links a{ padding:14px 8px; }
+    .hero{ padding:64px 20px 56px; }
+  }
+
+  a[href]:focus-visible, button:focus-visible{
+    outline:2px solid var(--brass);
+    outline-offset:2px;
+  }
+</style>
 </head>
 <body>
-  <header>
-    <h1>Alberto - Servicios Web</h1>
-    <p>Desarrollo y soluciones digitales</p>
-  </header>
+<a href="#servicios" class="skip-link">Saltar al contenido</a>
 
-  <nav>
-    <a href="#descripcion">Descripción</a>
-    <a href="#servicios">Servicios</a>
-    <a href="#contacto">Contacto</a>
-  </nav>
+<header>
+  <div class="nav wrap">
+    <a href="#inicio" class="brand">
+      <img src="logo/logo2.jpeg" alt="Logo de FORESCAT">
+      <span>
+        <span class="brand-name">FORESCAT</span>
+        <span class="brand-tag">Asesoría financiera y contable</span>
+      </span>
+    </a>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false" id="menuToggle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <nav class="links" id="navLinks">
+      <a href="#inicio">Inicio</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto" class="cta">Escribinos</a>
+    </nav>
+  </div>
+</header>
 
-  <section id="descripcion">
-    <h2>Sobre mí</h2>
-    <p>Soy desarrollador web especializado en sistemas con Django, PHP y MySQL. Me apasiona crear soluciones prácticas y eficientes para empresas y proyectos personales.</p>
-  </section>
+<section id="inicio" class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow">Registro Nº 001 · Desde Paraguay</div>
+    <h2>Tus números, claros y en orden.</h2>
+    <p class="lead">Acompañamos a empresas y emprendedores con contabilidad, impuestos y gestión laboral, para que tomes decisiones con información confiable, no con suposiciones.</p>
+    <div class="hero-ctas">
+      <a href="#servicios" class="btn btn-primary">Ver servicios</a>
+      <a href="#contacto" class="btn btn-ghost">Hablar con un asesor</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="num">6</span><span class="label">áreas de asesoría</span></div>
+      <div class="stat"><span class="num">100%</span><span class="label">cumplimiento normativo</span></div>
+      <div class="stat"><span class="num">24h</span><span class="label">tiempo de respuesta</span></div>
+    </div>
+  </div>
+</section>
 
-  <section id="servicios">
-    <h2>Servicios</h2>
-    <ul>
-      <li>Desarrollo de sistemas web</li>
-      <li>Diseño de interfaces HTML/CSS responsivas</li>
-      <li>Integración de bases de datos MySQL</li>
-      <li>Automatización de procesos con PHP/Django</li>
-    </ul>
-  </section>
+<section id="servicios">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Servicios</span>
+      <h2>Un plan de cuentas para cada necesidad</h2>
+      <p>Cada servicio funciona como un asiento en tu plan de cuentas: ordenado, identificable y siempre disponible cuando lo necesitás.</p>
+    </div>
+    <div class="ledger reveal">
+      <div class="ledger-row">
+        <span class="ledger-code">1010</span>
+        <div class="ledger-body">
+          <h3>Contabilidad</h3>
+          <p>Gestión y análisis financiero confiable, con estados contables claros para decidir a tiempo.</p>
+        </div>
+        <span class="ledger-tag">Mensual</span>
+      </div>
+      <div class="ledger-row">
+        <span class="ledger-code">1020</span>
+        <div class="ledger-body">
+          <h3>Impuestos</h3>
+          <p>Planificación fiscal y cumplimiento normativo, para que ninguna presentación se te pase por alto.</p>
+        </div>
+        <span class="ledger-tag">Recurrente</span>
+      </div>
+      <div class="ledger-row">
+        <span class="ledger-code">1030</span>
+        <div class="ledger-body">
+          <h3>Laboral</h3>
+          <p>Asesoría en nóminas y obligaciones laborales, cuidando a tu equipo y a tu empresa por igual.</p>
+        </div>
+        <span class="ledger-tag">Mensual</span>
+      </div>
+      <div class="ledger-row">
+        <span class="ledger-code">1040</span>
+        <div class="ledger-body">
+          <h3>Administración</h3>
+          <p>Optimización de procesos administrativos, para que el papeleo deje de robarte tiempo operativo.</p>
+        </div>
+        <span class="ledger-tag">A medida</span>
+      </div>
+      <div class="ledger-row">
+        <span class="ledger-code">1050</span>
+        <div class="ledger-body">
+          <h3>Auditoría</h3>
+          <p>Evaluación y control de riesgos financieros, con recomendaciones concretas y accionables.</p>
+        </div>
+        <span class="ledger-tag">Puntual</span>
+      </div>
+      <div class="ledger-row">
+        <span class="ledger-code">1060</span>
+        <div class="ledger-body">
+          <h3>Comercio internacional</h3>
+          <p>Estrategias contables para operaciones globales, con foco en cumplimiento y eficiencia fiscal.</p>
+        </div>
+        <span class="ledger-tag">A medida</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <section id="contacto">
-    <h2>Contacto</h2>
-    <p>Email: alberto@example.com</p>
-    <p>Teléfono: +595 999 123 456</p>
-  </section>
+<section id="nosotros">
+  <div class="wrap grid">
+    <div class="reveal">
+      <span class="eyebrow" style="color:var(--brass)">Nosotros</span>
+      <h2>Precisión, confianza y visión global</h2>
+      <p>FORESCAT acompaña a empresas y emprendedores en su crecimiento, con la misma disciplina que exige un buen balance: todo registrado, todo verificable, nada librado al azar.</p>
+    </div>
+    <div class="pillars reveal">
+      <div class="pillar">
+        <span class="mark">01</span>
+        <div><h4>Confianza</h4><p>Información clara, sin letra chica ni sorpresas de último momento.</p></div>
+      </div>
+      <div class="pillar">
+        <span class="mark">02</span>
+        <div><h4>Precisión</h4><p>Cada cifra revisada dos veces antes de llegar a tus manos.</p></div>
+      </div>
+      <div class="pillar">
+        <span class="mark">03</span>
+        <div><h4>Visión global</h4><p>Criterio local con estándares que resisten cualquier auditoría.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    <p>© 2026 Alberto - Todos los derechos reservados</p>
-  </footer>
+<section id="contacto">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Contacto</span>
+      <h2>Conversemos sobre tu empresa</h2>
+      <p>Contanos qué necesitás y te respondemos en menos de 24 horas hábiles.</p>
+    </div>
+    <div class="contact-shell reveal">
+      <div class="contact-info">
+        <h3>Otras formas de escribirnos</h3>
+        <p>Si preferís, también podés escribirnos directamente por estos medios.</p>
+        <div class="contact-line">
+          <span class="ic">✆</span> +595 000 000 000
+        </div>
+        <div class="contact-line">
+          <span class="ic">✉</span> contacto@forescat.com
+        </div>
+        <div class="contact-line">
+          <span class="ic">◎</span> @forescat
+        </div>
+      </div>
+      <form id="contactForm" novalidate>
+        <div class="field" id="nameField">
+          <label for="name">Nombre</label>
+          <input type="text" id="name" name="name" placeholder="Tu nombre">
+          <span class="error-msg" id="nameError"></span>
+        </div>
+        <div class="field" id="emailField">
+          <label for="email">Correo</label>
+          <input type="email" id="email" name="email" placeholder="tu@correo.com">
+          <span class="error-msg" id="emailError"></span>
+        </div>
+        <div class="field" id="messageField">
+          <label for="message">Mensaje</label>
+          <textarea id="message" name="message" rows="4" placeholder="Contanos brevemente qué necesitás"></textarea>
+          <span class="error-msg" id="messageError"></span>
+        </div>
+        <button type="submit" class="btn">Enviar mensaje</button>
+        <div class="form-status ok" id="formStatus" role="status"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 FORESCAT — Todos los derechos reservados</p>
+</footer>
+
+<script>
+  // Menú móvil
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Revelado suave al hacer scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('in'));
+  }
+
+  // Validación amigable del formulario de contacto
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('formStatus');
+
+  function setError(fieldId, errorId, message) {
+    const field = document.getElementById(fieldId);
+    const error = document.getElementById(errorId);
+    field.classList.toggle('invalid', Boolean(message));
+    error.textContent = message || '';
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valid = true;
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!name) {
+      setError('nameField', 'nameError', 'Contanos cómo te llamás.');
+      valid = false;
+    } else {
+      setError('nameField', 'nameError', '');
+    }
+
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!emailOk) {
+      setError('emailField', 'emailError', 'Escribí un correo válido, por ejemplo nombre@correo.com.');
+      valid = false;
+    } else {
+      setError('emailField', 'emailError', '');
+    }
+
+    if (!message) {
+      setError('messageField', 'messageError', 'Contanos brevemente qué necesitás.');
+      valid = false;
+    } else {
+      setError('messageField', 'messageError', '');
+    }
+
+    if (!valid) {
+      status.classList.remove('show');
+      return;
+    }
+
+    status.textContent = `Gracias, ${name}. Recibimos tu mensaje y te respondemos a ${email} dentro de las próximas 24 horas hábiles.`;
+    status.classList.add('show');
+    form.reset();
+  });
+</script>
 </body>
 </html>
